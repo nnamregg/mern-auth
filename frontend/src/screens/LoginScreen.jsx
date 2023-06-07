@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { Form, Button, Row, Col } from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
-import FormContainer from '../components/FormContainer'
-import { useLoginMutation } from '../slices/usersApiSlice'
-import { setCredentials } from '../slices/authSlice'
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Form, Button, Row, Col } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import FormContainer from '../components/FormContainer';
+import { useLoginMutation } from '../slices/usersApiSlice';
+import { setCredentials } from '../slices/authSlice';
+import { toast } from 'react-toastify';
+import Loader from '../components/Loader';
 
 const LoginScreen = () => {
     const [email, setEmail] = useState('');
@@ -29,7 +31,7 @@ const LoginScreen = () => {
             dispatch(setCredentials({...res}))
             navigate('/')
         } catch (err) {
-            console.log(err?.data?.message || err.error);
+            toast.error(err?.data?.message || err.error);
         }
     }
 
@@ -58,8 +60,13 @@ const LoginScreen = () => {
                     ></Form.Control>
                 </Form.Group>
 
-                <Button type='submit' variant='primary' className='mt-3'>
-                    Sign In
+                <Button
+                    type='submit'
+                    variant='primary'
+                    className='mt-3'
+                    disabled={isLoading}
+                >
+                    { isLoading ? <Loader/> : 'Sign In'}
                 </Button>
                 
                 <Row className='py-3'>
